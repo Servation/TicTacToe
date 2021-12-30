@@ -1,11 +1,11 @@
 #GameBoard {
   display: grid;
-  grid-template-columns: 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 200px 200px 200px;
 }
 .square {
-  font-size: 50px;
+  font-size: 100px;
   border: 1px solid black;
   text-align: center;
-  line-height: 100px;
+  line-height: 200px;
 }

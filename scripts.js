@@ -19,7 +19,6 @@ const player = (playerName) => {
                 won = true;
             }
         });
-        console.log(won);
     };
     const getName = () => name;
     const setName = (newName) => {
@@ -69,6 +68,7 @@ const displayController = (() => {
         if (playerTwo.getName() == "") {
             playerTwo.setName("Player O");
         }
+        gameINFO.textContent = "";
     };
 
     resetButton.addEventListener("click", () => {
@@ -85,32 +85,31 @@ const displayController = (() => {
         currentEl.setAttribute("id", el);
         currentEl.setAttribute("class", "square")
         currentEl.addEventListener("click", function () {
-            if (PlayerOneTurn) {
-                if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
-                    playerOne.setPos(el);
-                    document.getElementById(el).textContent = "x"
-                    PlayerOneTurn = false;
-                    playerOne.checkWinning();
-                    tieCounter++;
-                }
-            } else {
-                if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
-                    playerTwo.setPos(el);
-                    document.getElementById(el).textContent = "o"
-                    PlayerOneTurn = true;
-                    playerTwo.checkWinning();
-                    tieCounter++;
+            if (!(playerOne.getWon() || playerTwo.getWon() || tieCounter == 9)) {
+                if (PlayerOneTurn) {
+                    if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
+                        playerOne.setPos(el);
+                        document.getElementById(el).textContent = "x"
+                        PlayerOneTurn = false;
+                        playerOne.checkWinning();
+                        tieCounter++;
+                    }
+                } else {
+                    if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
+                        playerTwo.setPos(el);
+                        document.getElementById(el).textContent = "o"
+                        PlayerOneTurn = true;
+                        playerTwo.checkWinning();
+                        tieCounter++;
+                    }
                 }
             }
             if (playerOne.getWon()) {
                 gameINFO.textContent = playerOne.getName() + " Won";
-                resetBoard();
             } else if (playerTwo.getWon()) {
                 gameINFO.textContent = playerTwo.getName() + " Won";
-                resetBoard();
             } else if (tieCounter == 9) {
                 gameINFO.textContent = "It was tied";
-                resetBoard();
             }
         });
         boardEl.appendChild(currentEl);
