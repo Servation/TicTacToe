@@ -17,6 +17,9 @@ const player = (playerName) => {
         winningPos.forEach(arr => {
             if (currentPos.includes(arr[0]) && currentPos.includes(arr[1]) && currentPos.includes(arr[2])) {
                 won = true;
+                for (let i = 0; i < 3; i++) {
+                    document.getElementById(arr[i]).style.backgroundColor = "lightgreen"
+                }
             }
         });
     };
@@ -29,16 +32,13 @@ const player = (playerName) => {
     const setPos = (pos) => {
         currentPos.push(pos);
     };
-    const getPos = () => currentPos;
     const checkPos = (pos) => currentPos.includes(pos);
     const reset = () => {
         currentPos = [];
         won = false;
     };
-    return { setPos, getPos, reset: reset, checkPos, checkWinning, getWon, getName, setName };
+    return { setPos, reset, checkPos, checkWinning, getWon, getName, setName };
 }
-const playerOne = player("Player X");
-const playerTwo = player("Player O");
 
 const gameBoard = (() => {
     let _board = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
@@ -49,15 +49,22 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
+    const playerOne = player("Player X");
+    const playerTwo = player("Player O");
     let PlayerOneTurn = true;
     let tieCounter = 0;
     const boardEl = document.getElementById("GameBoard");
     const resetButton = document.getElementById("restartButton");
+    const playAgainButton = document.getElementById("playAgainButton");
+    const modelBox = document.getElementById("modalBox");
     const gameINFO = document.getElementById("info");
+    const gameMessage = document.getElementById("gameMessage");
+    gameINFO.textContent = playerOne.getName() + "'s turn."
     const resetBoard = () => {
         let boardNodes = [...document.getElementsByClassName("square")]
         boardNodes.forEach(el => {
             el.textContent = "";
+            el.style.backgroundColor = "white";
         });
         playerOne.reset();
         playerTwo.reset();
@@ -68,9 +75,16 @@ const displayController = (() => {
         if (playerTwo.getName() == "") {
             playerTwo.setName("Player O");
         }
-        gameINFO.textContent = "";
+        if (PlayerOneTurn) {
+            gameINFO.textContent = playerOne.getName() + "'s turn."
+        } else {
+            gameINFO.textContent = playerTwo.getName() + "'s turn."
+        }
+        modelBox.style.display = "none";
     };
-
+    playAgainButton.addEventListener("click", () => {
+        resetBoard();
+    });
     resetButton.addEventListener("click", () => {
         const player1Input = document.getElementById("Player1");
         const player2Input = document.getElementById("Player2");
@@ -87,6 +101,7 @@ const displayController = (() => {
         currentEl.addEventListener("click", function () {
             if (!(playerOne.getWon() || playerTwo.getWon() || tieCounter == 9)) {
                 if (PlayerOneTurn) {
+                    gameINFO.textContent = playerTwo.getName() + "'s turn."
                     if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
                         playerOne.setPos(el);
                         document.getElementById(el).textContent = "x"
@@ -95,6 +110,7 @@ const displayController = (() => {
                         tieCounter++;
                     }
                 } else {
+                    gameINFO.textContent = playerOne.getName() + "'s turn."
                     if (!(playerOne.checkPos(el) || playerTwo.checkPos(el))) {
                         playerTwo.setPos(el);
                         document.getElementById(el).textContent = "o"
@@ -105,11 +121,17 @@ const displayController = (() => {
                 }
             }
             if (playerOne.getWon()) {
-                gameINFO.textContent = playerOne.getName() + " Won";
+                gameMessage.textContent = playerOne.getName() + " Won!";
+                gameINFO.textContent = "";
+                modelBox.style.display = "flex";
             } else if (playerTwo.getWon()) {
-                gameINFO.textContent = playerTwo.getName() + " Won";
+                gameMessage.textContent = playerTwo.getName() + " Won!";
+                gameINFO.textContent = "";
+                modelBox.style.display = "flex";
             } else if (tieCounter == 9) {
-                gameINFO.textContent = "It was tied";
+                gameMessage.textContent = "It was tied...";
+                gameINFO.textContent = "";
+                modelBox.style.display = "flex";
             }
         });
         boardEl.appendChild(currentEl);

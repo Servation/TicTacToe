@@ -11,13 +11,19 @@
 </head>
 
 <body>
-    <label for="Player1">Player X:</label>
-    <input type="text" id="Player1"><br>
-    <label for="Player2">Player O:</label>
-    <input type="text" id="Player2"><br>
-    <button id="restartButton">Set/Reset</button>
+    <div id="gameInputs">
+        <label for="Player1">Player X:</label>
+        <input type="text" id="Player1"><br>
+        <label for="Player2">Player O:</label>
+        <input type="text" id="Player2"><br>
+        <button id="restartButton">Set/Reset</button>
+    </div>
     <div id="GameBoard"></div>
     <div id="info"></div>
+    <div id="modalBox">
+        <div id="gameMessage"></div>
+        <button id="playAgainButton">Play Again!</button>
+    </div>
 </body>
 
 </html>
